@@ -1,1 +1,3 @@
 *.class
+gwt-unitCache
+gwt-unitCache/**
