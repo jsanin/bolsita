@@ -1,0 +1,2 @@
+serviceClass: com.sanin.bolsita.client.BolsitaService
+path: A231D5692404C01833E9E7990026E5EA.gwt.rpc

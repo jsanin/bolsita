@@ -1,0 +1,67 @@
+com.google.gwt.i18n.client.NumberFormat nf = com.google.gwt.i18n.client.NumberFormat.getFormat("000000.00");
+System.out.println(nf.format(22222.0000222));An exception occurred during evaluation:  java.lang.ExceptionInInitializerError
+
+
+[{mes: "2013-06", mercado: 165.0, hogar: 130.44}, {mes: "2013-07", mercado: 33.9, comidas: 105.4}]
+		
+		
+        // second graph              
+        graph = new AmCharts.AmGraph();
+        graph.title = "Hogar";
+        graph.labelText = "[[value]]";
+        graph.valueField = "hogar";
+        graph.type = "column";
+        graph.lineAlpha = 0;
+        graph.fillAlphas = 1;
+        graph.lineColor = "#D8E0BD";
+        chart.addGraph(graph);
+
+        // third graph                              
+        graph = new AmCharts.AmGraph();
+        graph.title = "Comidas";
+        graph.labelText = "[[value]]";
+        graph.valueField = "comidas";
+        graph.type = "column";
+        graph.lineAlpha = 0;
+        graph.fillAlphas = 1;
+        graph.lineColor = "#B3DBD4";
+        chart.addGraph(graph);
+
+        // fourth graph  
+        graph = new AmCharts.AmGraph();
+        graph.title = "Latin America";
+        graph.labelText = "[[value]]";
+        graph.valueField = "lamerica";
+        graph.type = "column";
+        graph.lineAlpha = 0;
+        graph.fillAlphas = 1;
+        graph.lineColor = "#69A55C";
+        chart.addGraph(graph);
+
+        // fifth graph
+        graph = new AmCharts.AmGraph();
+        graph.title = "Middle-East";
+        graph.labelText = "[[value]]";
+        graph.valueField = "meast";
+        graph.type = "column";
+        graph.lineAlpha = 0;
+        graph.fillAlphas = 1;
+        graph.lineColor = "#B5B8D3";
+        chart.addGraph(graph);
+
+        // sixth graph   
+        graph = new AmCharts.AmGraph();
+        graph.title = "Africa";
+        graph.labelText = "[[value]]";
+        graph.valueField = "africa";
+        graph.type = "column";
+        graph.lineAlpha = 0;
+        graph.fillAlphas = 1;
+        graph.lineColor = "#F4E23B";
+        chart.addGraph(graph);
+
+        
+        
+        
+ java.text.DecimalFormat df = new java.text.DecimalFormat("#,##0");
+ System.out.println(df.format(1000000));

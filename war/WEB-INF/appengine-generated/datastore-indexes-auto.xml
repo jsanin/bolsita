@@ -1,0 +1,11 @@
+<!-- Indices written at Sun, 19 Oct 2014 22:48:57 COT -->
+
+<datastore-indexes>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="ReporteBolsita" ancestor="false" source="auto">
+        <property name="userId" direction="asc"/>
+        <property name="fecha" direction="asc"/>
+    </datastore-index>
+
+</datastore-indexes>

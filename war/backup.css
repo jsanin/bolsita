@@ -1,0 +1,129 @@
+#fecha {
+  border: 1px solid #ccc;
+  border-top: 1px solid #999;
+  width: 70px;
+  
+}
+
+#valor {
+  border: 1px solid #ccc;
+  border-top: 1px solid #999;
+  width: 60px;
+  text-align: right;
+}
+
+#responsable {
+  border: 1px solid #ccc;
+  border-top: 1px solid #999;
+  width: 70px;
+}
+
+#tipoPago {
+  border: 1px solid #ccc;
+  border-top: 1px solid #999;
+  width: 80px;
+}
+
+#categoria {
+  border: 1px solid #ccc;
+  border-top: 1px solid #999;
+  width: 100px;
+}
+
+
+h1 {
+  font-size: 2em;
+  font-weight: bold;
+  color: #777777;
+  margin: 40px 0px 70px;
+  text-align: center;
+}
+
+.sendButton {
+  display: block;
+  font-size: 16pt;
+}
+
+/** Most GWT widgets already have a style name defined */
+.gwt-DialogBox {
+  width: 400px;
+}
+
+.gwt-TextBox {
+  border: 1px solid #ccc;
+  border-top: 1px solid #999;
+}
+
+.errorTextBox {
+  border: 1px solid #f00;
+}
+
+
+.dialogVPanel {
+  margin: 5px;
+}
+
+.serverResponseLabelError {
+  color: red;
+}
+
+/** Set ids using widget.getElement().setId("idOfElement") */
+#closeButton {
+  margin: 15px 6px 6px;
+}
+
+#reportTableResult
+{
+	font-size: 12px;
+	background: #fff;
+	margin: 45px;
+	width: 480px;
+	border-collapse: collapse;
+	text-align: left;
+}
+.reportTableResult-th
+{
+	font-size: 14px;
+	font-weight: normal;
+	color: #039;
+	padding: 10px 8px;
+	border-bottom: 2px solid #6678b1;
+}
+#reportTableResult td
+{
+	color: #669;
+	padding: 9px 8px 0px 8px;
+}
+#reportTableResult tbody tr:hover td
+{
+	color: #009;
+	background: #d0dafd;
+}
+
+#totalCategoria
+{
+	font-size: 12px;
+	margin: 45px;
+	width: 480px;
+	text-align: left;
+	border-collapse: collapse;
+	border: 1px solid #69c;
+}
+.totalCategoria-th
+{
+	padding: 12px 17px 12px 17px;
+	font-weight: normal;
+	font-size: 14px;
+	color: #039;
+	border-bottom: 1px dashed #69c;
+}
+#totalCategoria td
+{
+	padding: 7px 17px 7px 17px;
+	color: #669;
+}
+#totalCategoria tbody tr:hover td
+{
+	color: #339;
+	background: #d0dafd;
+}

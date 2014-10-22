@@ -1,0 +1,325 @@
+<!doctype html>
+<!-- The DOCTYPE declaration above will set the     -->
+<!-- browser's rendering engine into                -->
+<!-- "Standards Mode". Replacing this declaration   -->
+<!-- with a "Quirks Mode" doctype is not supported. -->
+
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="Juan Sanin">
+
+    <!--                                                               -->
+    <!-- Consider inlining CSS to reduce the number of requested files -->
+    <!--                                                               -->
+    <link type="text/css" rel="stylesheet" href="Bolsita.css">
+        <link href="css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px;
+      }
+    </style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!--                                           -->
+    <!-- Any title is fine                         -->
+    <!--                                           -->
+    <title>Controla tus finanzas personales - Bolsita</title>
+    
+    <!--                                           -->
+    <!-- This script loads your compiled module.   -->
+    <!-- If you add any GWT meta tags, they must   -->
+    <!-- be added before this line.                -->
+    <!--                                           -->
+    <script type="text/javascript" language="javascript" src="bolsita/bolsita.nocache.js"></script>
+  </head>
+
+  <!--                                           -->
+  <!-- The body can have arbitrary html, or      -->
+  <!-- you can leave the body empty if you want  -->
+  <!-- to create a completely dynamic UI.        -->
+  <!--                                           -->
+  <body>
+  <!-- facebook login configuration -->
+  <div id="fb-root"></div>
+    <script src="js/amcharts.js"></script>
+	<script>
+	  // Additional JS functions here
+	  window.fbAsyncInit = function() {
+	    FB.init({
+          appId      : '493814644010167', // App ID dev
+	      channelUrl : '/channel.html', // Channel File
+	      status     : true, // check login status
+	      cookie     : true, // enable cookies to allow the server to access the session
+	      xfbml      : true  // parse XFBML
+	    });
+	
+	    // Additional init code here
+	  };
+	  
+  
+	  function login() {
+		    FB.login(function(response) {
+		        if (response.authResponse) {
+		            // connected
+				    FB.api('/me', function(response) {
+			            window.onLogin(response);
+				    });
+		        } else {
+		            // cancelled
+				    console.log('authResponse null.... ' + response.authResponse);
+		        }
+		    });
+		}
+	  
+	    function testFunction() {
+		    FB.getLoginStatus(function(response) {
+		    	//alert(facebookinfo.fcbkLoginStatus.value);
+	        	facebookinfo.fcbkLoginStatus.value = response.status;
+	        	alert("facebook status: " + response.status + ". " + facebookinfo.fcbkLoginStatus.value);
+		        if (response.status === 'connected') {
+		            // connected
+		        } else if (response.status === 'not_authorized') {
+		            // not_authorized
+		        } else {
+		            // not_logged_in
+		        }
+		    });
+	    }
+
+	  // Load the SDK Asynchronously
+	  (function(d){
+	     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+	     if (d.getElementById(id)) {return;}
+	     js = d.createElement('script'); js.id = id; js.async = true;
+	     js.src = "//connect.facebook.net/en_US/all.js";
+	     ref.parentNode.insertBefore(js, ref);
+	   }(document));
+	</script>
+<!-- end facebook login configuration -->
+	<script>
+    function createCatChart(data) {
+			var chartPieCat = new AmCharts.AmPieChart();
+            // title of the chart
+            chartPieCat.addTitle("Total por categorías", 16);
+
+            chartPieCat.dataProvider = eval(data);
+            chartPieCat.titleField = "categoria";
+            chartPieCat.valueField = "valor";
+            chartPieCat.sequencedAnimation = true;
+            chartPieCat.startEffect = "elastic";
+            chartPieCat.innerRadius = "30%";
+            chartPieCat.startDuration = 2;
+            chartPieCat.labelRadius = 15;
+
+            // the following two lines makes the chart 3D
+            chartPieCat.depth3D = 10;
+            chartPieCat.angle = 15;
+
+            // WRITE                                 
+            chartPieCat.write("chartdivcat");
+          }
+		
+    function createRespChart(data) {
+		var chart = new AmCharts.AmPieChart();
+        // title of the chart
+        chart.addTitle("Total por responsable", 16);
+
+        chart.dataProvider = eval(data);
+        chart.titleField = "responsable";
+        chart.valueField = "valor";
+        chart.sequencedAnimation = true;
+        chart.startEffect = "elastic";
+        chart.innerRadius = "30%";
+        chart.startDuration = 2;
+        chart.labelRadius = 15;
+
+        // the following two lines makes the chart 3D
+        chart.depth3D = 10;
+        chart.angle = 15;
+
+        // WRITE                                 
+        chart.write("chartdivresp");
+      }
+
+
+    function createCatBar(data) {
+        // SERIAL CHART
+        var chartBarCat = new AmCharts.AmSerialChart();
+        chartBarCat.dataProvider = eval(data);
+        chartBarCat.categoryField = "categoria";
+        chartBarCat.startDuration = 1;
+
+        // AXES
+        // category
+        var categoryAxis = chartBarCat.categoryAxis;
+        categoryAxis.labelRotation = 45; // this line makes category values to be rotated
+        categoryAxis.gridAlpha = 0;
+        categoryAxis.fillAlpha = 1;
+        categoryAxis.fillColor = "#FAFAFA";
+        categoryAxis.gridPosition = "start";
+
+        // value
+        var valueAxis = new AmCharts.ValueAxis();
+        valueAxis.dashLength = 5;
+        valueAxis.title = "Gasto por categoría"
+        valueAxis.axisAlpha = 0;
+        chartBarCat.addValueAxis(valueAxis);
+
+        // GRAPH
+        var graph = new AmCharts.AmGraph();
+        graph.valueField = "valor";
+        graph.colorField = "color";
+        graph.balloonText = "[[category]]: [[value]]";
+        graph.type = "column";
+        graph.lineAlpha = 0;
+        graph.fillAlphas = 1;
+        chartBarCat.addGraph(graph);
+
+        // WRITE
+        chartBarCat.write("divcatbar");
+    }
+    
+    var catInfos;
+    
+    function CatInfo(nombreCat, cat, color) {
+    	this.nombre_cat = nombreCat;
+    	this.cat = cat;
+    	this.color = color;
+    }
+    
+    function addNewCatInfo(nombreCat, cat, color) {
+    	catInfos[catInfos.length] = new CatInfo(nombreCat, cat, color);
+    	
+    }
+    
+    function clearCatInfo() {
+    	catInfos = null;
+    	catInfos = new Array();
+    }
+
+    function createTotalYear(data) {
+        // SERIAL CHART
+        chart = new AmCharts.AmSerialChart();
+        chart.dataProvider = eval(data);
+        chart.categoryField = "mes";
+        chart.plotAreaBorderAlpha = 0.2;
+
+        // AXES
+        // category
+        var categoryAxis = chart.categoryAxis;
+        categoryAxis.gridAlpha = 0.1;
+        categoryAxis.axisAlpha = 0;
+        categoryAxis.gridPosition = "start";
+
+        // value
+        var valueAxis = new AmCharts.ValueAxis();
+        valueAxis.stackType = "regular";
+        valueAxis.gridAlpha = 0.1;
+        valueAxis.axisAlpha = 0;
+        chart.addValueAxis(valueAxis);
+
+        // GRAPHS
+        for(i = 0; i < catInfos.length; i++) {
+            var graph = getGraph(catInfos[i].nombre_cat, catInfos[i].cat,  catInfos[i].color);
+            chart.addGraph(graph);
+        	
+        }
+
+        // LEGEND                  
+        var legend = new AmCharts.AmLegend();
+        legend.borderAlpha = 0.2;
+        legend.horizontalGap = 10;
+        chart.addLegend(legend);
+
+        // WRITE
+        chart.write("charttotaldiv");
+    }
+
+	function getGraph(title, valueField, lineColor) {
+        var graph = new AmCharts.AmGraph();
+        graph.title = title;
+        graph.labelText = "[[value]]";
+        graph.balloonText = "[[title]]: [[value]]";
+        graph.valueField = valueField;
+        graph.type = "column";
+        graph.lineAlpha = 0;
+        graph.fillAlphas = 1;
+        graph.lineColor = lineColor;
+		return graph;
+	}
+    
+    // this method sets chart 2D/3D
+
+
+    function setDepth() {
+        if (document.getElementById("rb1").checked) {
+            chart.depth3D = 0;
+            chart.angle = 0;
+        } else {
+            chart.depth3D = 25;
+            chart.angle = 30;
+        }
+        chart.validateNow();
+    }
+
+    </script>
+
+
+    <!-- OPTIONAL: include this if you want history support -->
+    <iframe src="javascript:''" id="__gwt_historyFrame" tabIndex='-1' style="position:absolute;width:0;height:0;border:0"></iframe>
+    
+    <!-- RECOMMENDED if your web app will not function without JavaScript enabled -->
+    <noscript>
+      <div style="width: 22em; position: absolute; left: 50%; margin-left: -11em; color: red; background-color: white; border: 1px solid red; padding: 4px; font-family: sans-serif">
+        Your web browser must have JavaScript enabled
+        in order for this application to display correctly.
+      </div>
+    </noscript>
+	<div class="navbar">
+		<div class="navbar-inner">
+			<div class="container" id="mainMenu">
+				<!-- 
+				<a class="brand" href="./Bolsita.html">Bolsita</a>
+				<ul class="nav">
+					<li><a href="javascript:;" id="mesLink"></a></li>
+					<li><a	href="javascript:;" id="annoLink"></a></li>
+				</ul>
+				<ul class="nav pull-right">
+					<li><a href="javascript:;" id="topUserName"></a></li>
+					<li><a href="javascript:;" id="signOutLink">Salir</a></li>
+				</ul>
+				 -->
+			</div>
+		</div>
+	</div>
+
+<div class="row-fluid">
+	<div class="span12" id="loginInfo">
+	</div>
+</div>
+<div class="row-fluid">
+	<div class="span12" id="barChartCat"></div>
+</div>
+<div class="row-fluid">
+	<div class="span5" id="pieDiv"></div>
+	<div class="span6 offset1" id="reportTable"></div>
+</div>
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap-transition.js"></script>
+    <script src="js/bootstrap-alert.js"></script>
+    <script src="js/bootstrap-modal.js"></script>
+    <script src="js/bootstrap-dropdown.js"></script>
+    <script src="js/bootstrap-scrollspy.js"></script>
+    <script src="js/bootstrap-tab.js"></script>
+    <script src="js/bootstrap-tooltip.js"></script>
+    <script src="js/bootstrap-popover.js"></script>
+    <script src="js/bootstrap-button.js"></script>
+    <script src="js/bootstrap-collapse.js"></script>
+    <script src="js/bootstrap-carousel.js"></script>
+    <script src="js/bootstrap-typeahead.js"></script>
+
+  </body>
+</html>
