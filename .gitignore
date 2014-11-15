@@ -1,3 +1,1 @@
-*.class
-gwt-unitCache
-gwt-unitCache/**
+/test-classes
