@@ -78,6 +78,8 @@ public class Bolsita implements EntryPoint {
 	final FlexTable sumFlxt = new FlexTable();
 	AdvancedFlexTable puntoDecimalPanel = new AdvancedFlexTable();
 	SimplePanel chartCatBarPanel = new SimplePanel();
+	SimplePanel chartTotalYearPanel = new SimplePanel();
+
 
 //	final HTML fbProfile = new HTML();
 	
@@ -117,6 +119,10 @@ public class Bolsita implements EntryPoint {
 	Anchor nameApp = null;
 	
 	UnorderedListWidget ulMenu = new UnorderedListWidget();
+	
+	ListItemWidget liMesLink = new ListItemWidget();
+	ListItemWidget liAnnoLink = new ListItemWidget();
+
 
 	
 	/**
@@ -221,6 +227,46 @@ public class Bolsita implements EntryPoint {
 		}
 
 	}
+	
+	private void showAnno() {
+		
+		// se remueven los elementos de la pestaña Mes
+		clearInsideMenu(ulInsideMenu);
+		RootPanel.get("loginInfo").remove(ulInsideMenu);
+		
+		clearFlexTable(flxt, 1);
+		clearFlexTable(sumFlxt, -1);
+		RootPanel.get("reportTable").remove(flxt);
+		RootPanel.get("reportTable").remove(puntoDecimalPanel);
+		RootPanel.get("barChartCat").remove(chartCatBarPanel);
+		chartCatBarPanel.removeFromParent();
+
+		RootPanel.get("barChartCat").remove(chartTotalYearPanel);
+		chartTotalYearPanel.removeFromParent();
+
+
+		// fin remoción de elementos de pestaña Mes
+		
+		chartTotalYearPanel.getElement().setInnerHTML("");
+		chartTotalYearPanel.getElement().setId("charttotaldiv");
+		chartTotalYearPanel.getElement().setAttribute("style", "width:1000px; height:450px;");
+		
+		RootPanel.get("barChartCat").add(chartTotalYearPanel);
+		
+		clearCatInfo();
+		int colIndex = 0;
+		for (String cat : categorias) {
+			addNewCatInfo(cat, cat, catColors[colIndex++]);
+			if(colIndex == catColors.length) {
+				colIndex = 0;
+			}
+		}
+		
+		createTotalYear(jsonMonthCat);
+
+
+		
+	}
 
 	private String getFcbkButton() {
 		//return "<fb:login-button/>";
@@ -278,6 +324,7 @@ public class Bolsita implements EntryPoint {
 			public void onSuccess(BolsitaUser bu) {
 				userId = bu.getId();
 				parseDomTree();
+				generateTopMenu();
 				showContent();
 			}
 		});
@@ -362,6 +409,11 @@ public class Bolsita implements EntryPoint {
 
 		RootPanel.get("barChartCat").add(chartCatBarPanel);
 
+		// se elimina la gráfica de año en caso de que exista
+		RootPanel.get("barChartCat").remove(chartTotalYearPanel);
+		chartTotalYearPanel.removeFromParent();
+
+
 
 		// configurar punto decimal para los valores de la tabla
 		final ListBox puntoDecimal = new ListBox();
@@ -424,27 +476,6 @@ public class Bolsita implements EntryPoint {
 //		RootPanel.get("reportTable").add(puntoDecimalPanel);
 		RootPanel.get("reportTable").add(flxt);
 		
-		// links de mes y de año
-		
-		RootPanel mainMenu = RootPanel.get("mainMenu");
-		int wcount = mainMenu.getWidgetCount();
-
- 		ulMenu.setStyleName("nav");
- 		ListItemWidget liMesLink = new ListItemWidget();
- 		liMesLink.setStyleName("active");
- 		Anchor linkMes = new Anchor("Mes");
- 		liMesLink.add(linkMes);
- 		ulMenu.add(liMesLink);
-
- 		ListItemWidget liAnnoLink = new ListItemWidget();
- 		Anchor annoMes = new Anchor("Año");
- 		liAnnoLink.add(annoMes);
- 		ulMenu.add(liAnnoLink);
-
- 		mainMenu.insert(ulMenu, 1);
-
-		
-		// Fin links mes y año
 		
 		flxt.addClickHandler(new ClickHandler() {
 			int selectedRow = -1;
@@ -739,6 +770,66 @@ public class Bolsita implements EntryPoint {
 				//flxt.getFlexCellFormatter().setColSpan(1, 0, 3);
 				
 				
+	}
+
+	/**
+	 * Genera los links del menú principal de la aplicación. Hasta ahora los links de Mes y de Año
+	 */
+	private void generateTopMenu() {
+		// links de mes y de año
+		
+		RootPanel mainMenu = RootPanel.get("mainMenu");
+
+		ulMenu.setStyleName("nav");
+ 		liMesLink.setStyleName("active");
+ 		Anchor linkMes = new Anchor("Mes");
+ 		linkMes.addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				showContent();
+				liMesLink.setStyleName("active");
+				liAnnoLink.setStyleName("");
+				
+			}
+		});
+ 		
+ 		liMesLink.add(linkMes);
+ 		ulMenu.add(liMesLink);
+
+ 		Anchor annoMes = new Anchor("Año");
+
+		annoMes.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+//				changeSelectedMonth(this.month);
+//				showDataTable(this.month);
+				bolsitaService.getReportsByMonthAndCat(userId, new AsyncCallback<Map<Integer,Map<String,Float>>>() {
+					public void onFailure(Throwable t) {
+						Window.alert("Error: " + t.getMessage());						
+					}
+		
+					public void onSuccess(Map<Integer,Map<String,Float>> result) {
+						Object[] rets = getMonthCatJson(result);
+						jsonMonthCat = (String)rets[0];
+						categorias = (Set<String>)rets[1];
+						showAnno();
+						liAnnoLink.setStyleName("active");
+						liMesLink.setStyleName("");
+					}
+		
+				});
+
+			}
+		});
+ 		
+ 		liAnnoLink.add(annoMes);
+ 		ulMenu.add(liAnnoLink);
+
+ 		mainMenu.insert(ulMenu, 1);
+
+		
+		// Fin links mes y año
 	}
 	
 	private int getIndexCurrentMonth() {
@@ -1061,6 +1152,8 @@ public class Bolsita implements EntryPoint {
 	}
 
 	private Object[] getMonthCatJson(Map<Integer, Map<String, Float>> monthCat) {
+		NumberFormat nf = NumberFormat.getFormat(getFormatNumberPattern());
+		
 		Set<Integer> keys = monthCat.keySet();
 		Set<String> categs = new HashSet<String>();
 		String json = "[";
@@ -1072,7 +1165,7 @@ public class Bolsita implements EntryPoint {
 			Set<String> kcat = categorias.keySet();
 			for (String kc : kcat) {
 				categs.add(kc);
-				json += kc + ": " + categorias.get(kc) + ", ";
+				json += kc + ": " + nf.format(categorias.get(kc)) + ", ";
 			}
 
 			if(!kcat.isEmpty()) {

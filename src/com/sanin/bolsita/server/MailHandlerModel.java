@@ -718,7 +718,26 @@ public class MailHandlerModel {
 		return "jsanin@gmail.com";
 	}
 
+	
+	/**
+	 * Retorna los reportes del usuario userId del año actual
+	 * @param userId
+	 * @return
+	 */
 	public List<ReporteBolsita> getUserReports(Long userId) {
+		return getUserReports(userId, -1, -1);
+	}
+	
+	/**
+	 * Retorna los reportes del usuario userId en los años especificados en los parámetros. Los parámetros
+	 * annoInicio y annoFin se setean sólo si son mayores a 0 en caso contrario no se setean, el sistema
+	 * asume el año actual
+	 * @param userId
+	 * @param annoInicio
+	 * @param annoFin
+	 * @return
+	 */
+	public List<ReporteBolsita> getUserReports(Long userId, int annoInicio, int annoFin) {
 		MailHandlerDAO dao = new MailHandlerDAO();
 
 		Calendar calIni = Calendar.getInstance(TimeZone.getTimeZone("GMT-5"));
@@ -737,6 +756,13 @@ public class MailHandlerModel {
 		calFin.set(Calendar.SECOND, 0);
 		calFin.set(Calendar.MILLISECOND, 0);
 
+		if(annoInicio > 0) {
+			calIni.set(Calendar.YEAR, annoInicio);
+		}
+		if(annoFin > 0) {
+			calFin.set(Calendar.YEAR, annoFin);
+		}
+		
 		Query<ReporteBolsita> reports = dao.getReports(userId, calIni.getTime(), calFin.getTime());
 		return reports.list();
 	}
@@ -758,6 +784,10 @@ public class MailHandlerModel {
 		calFin.set(Calendar.MINUTE, 0);
 		calFin.set(Calendar.SECOND, 0);
 		calFin.set(Calendar.MILLISECOND, 0);
+	
+		// para que la consulta se haga sobre un año en particular
+//		calIni.set(Calendar.YEAR, 2000);
+//		calFin.set(Calendar.YEAR, 2020);
 		
 		Query<ReporteBolsita> reports = dao.getReports(userId, calIni.getTime(), calFin.getTime());
 		return reports.list();
@@ -824,8 +854,8 @@ public class MailHandlerModel {
 	}
 	
 	public Map<Integer, Map<String, Float>> getReportsByMonthAndCat(Long userId) {
-		List<ReporteBolsita> reps = getUserReports(userId);
-		final String emptyCat = "Sin categoría";
+		List<ReporteBolsita> reps = getUserReports(userId, 2000, -1);
+		final String emptyCat = "SinCategoria";
 		Map<Integer, Map<String, Float>> hmMonth = new LinkedHashMap<Integer, Map<String, Float>>();
 		for (ReporteBolsita rb : reps) {
 			Date date = rb.getFecha();
@@ -836,8 +866,9 @@ public class MailHandlerModel {
 			
 			String[] categoria = rb.getCategoria();
 			String cat = emptyCat;
-			if(categoria != null && categoria.length > 0) {
-				cat = categoria[0];
+			if(categoria != null && categoria.length > 0
+					&& categoria[0] != null && categoria[0].trim().length() > 0) {
+				cat = categoria[0].trim();
 			}
 			Map<String, Float> hmCat = hmMonth.get(month);
 			if(hmCat == null) {

@@ -1,8 +1,8 @@
-<!-- Indices written at Tue, 21 Oct 2014 22:26:14 COT -->
+<!-- Indices written at Sat, 31 Jan 2015 14:59:17 COT -->
 
 <datastore-indexes>
 
-    <!-- Used 1 time in query history -->
+    <!-- Used 2 times in query history -->
     <datastore-index kind="ReporteBolsita" ancestor="false" source="auto">
         <property name="userId" direction="asc"/>
         <property name="fecha" direction="asc"/>
