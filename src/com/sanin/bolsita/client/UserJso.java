@@ -8,7 +8,7 @@ public class UserJso extends JavaScriptObject {
 
 	  public final native String getFirstName() /*-{ return this.first_name; }-*/;
 	  public final native String getLastName()  /*-{ return this.last_name;  }-*/;
-	  public final native String getUsername()  /*-{ return this.username;  }-*/;
+	  public final native String getId()  /*-{ return this.id;  }-*/;
 	  public final native String getGender()  /*-{ return this.gender;  }-*/;
 	  public final native String getLocale()  /*-{ return this.locale;  }-*/;
 	  public final native String getName()  /*-{ return this.name;  }-*/;

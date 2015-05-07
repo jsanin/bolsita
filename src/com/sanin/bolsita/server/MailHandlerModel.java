@@ -60,9 +60,17 @@ public class MailHandlerModel {
 		presupuestoMes = new PresupuestoMes();
 		presupuestoMes.setPresupuestoTotal(4_000f);
 		HashMap<String, Float> presuCat = new HashMap<>();
-		presuCat.put("comidas", 1_000f);
-		presuCat.put("diversion", 1_000f);
-		presuCat.put("hogar", 500f);
+		presuCat.put("belleza", 300f);
+		presuCat.put("carro", 570f);
+		presuCat.put("diversion", 910f);
+		presuCat.put("gastosisa", 520f);
+		presuCat.put("gastosjuan", 375f);
+		presuCat.put("gladys", 150f);
+		presuCat.put("hogar", 3_850f);
+		presuCat.put("imprevistos", 300f);
+		presuCat.put("mercado", 1_240f);
+		presuCat.put("princess", 660f);
+		presuCat.put("salud", 950f);
 		presupuestoMes.setPresupuestoCategoria(presuCat);
 		presupuestoMes.setConsumoPresupuestoParaReporte(0.75f);
 		

@@ -300,7 +300,10 @@ public class Bolsita implements EntryPoint {
 		UserJso userJso = (UserJso)response;
 //		Hidden fcbkName = Hidden.wrap(DOM.getElementById("fcbkName"));
 //		System.out.println("fcbkName: " + fcbkName.getValue());
-		this.username = userJso.getUsername();
+		// 6may2015 el campo username del objeto user no está disponible
+		// tuve que cambiarlo por el campo id
+		// this.username = userJso.getUsername();
+		this.username = userJso.getId();
 //		System.out.println("username from javacript: " + this.username);
 		topUserName.setText(userJso.getName());
 		
@@ -341,7 +344,7 @@ public class Bolsita implements EntryPoint {
 		bu.setLocale(uj.getLocale());
 		bu.setName(uj.getName());
 		bu.setTimezone(uj.getTimezone());
-		bu.setUsername(uj.getUsername());
+		bu.setUsername(uj.getId());
 		return bu;
 	}
 
