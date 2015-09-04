@@ -1,3 +1,0 @@
-# Module bolsita
-# RPC service class, partial path of RPC policy file
-com.sanin.bolsita.client.BolsitaService, A231D5692404C01833E9E7990026E5EA.gwt.rpc

@@ -57,8 +57,9 @@ public class MailHandlerModel {
 	private PresupuestoMes presupuestoMes = null;
 	
 	public MailHandlerModel() {
+		// TODO: Que este presupuesto quede en la BD por usuario
 		presupuestoMes = new PresupuestoMes();
-		presupuestoMes.setPresupuestoTotal(4_000f);
+		presupuestoMes.setPresupuestoTotal(9_000f);
 		HashMap<String, Float> presuCat = new HashMap<>();
 		presuCat.put("belleza", 300f);
 		presuCat.put("carro", 570f);
